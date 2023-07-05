@@ -64,6 +64,6 @@ during the import, the same groups expected to pre-exist in the target server, a
 4. run the user manager
    
    ```
-   ./user-manager.sh [export | import | migrate]
+    user-manager.sh [export | import | migrate]
    ```
 **NOTE: when you export, only export parameters needed, when import then only import parameters are needed, when igrate you need to specify both export and import related variables**
