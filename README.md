@@ -16,14 +16,25 @@ during the import, the same groups expected to pre-exist in the target server, a
 
    git clone git@github.com:nemerna/kcum.git
    ```
-2. move to the bin directory
+2. move to the project dir directory
    
    ```
-    cd kcum/bin
+    cd kcum
    ```
-3. export relevant env vars
+
+3. add the bin to your PATH
+
+   ```
+    export PATH=$PATH:$(pwd)/bin
+   ```
+
+4. export relevant env vars
    
    ```
+
+    #the work directory to proccess directory (always should be set)
+    export WORK_DIRECTORY=./USERMANAGER_EXPORT
+
     # the source server url (copy from)
     export IMPORT_KEYCLOAK_SERVER=https://src-server.com
 
@@ -35,7 +46,6 @@ during the import, the same groups expected to pre-exist in the target server, a
 
     # the client secret of the source server (copy from)
     export IMPORT_SECRET=src-secret
-
 
 
     # the target server url (create in)
@@ -54,5 +64,6 @@ during the import, the same groups expected to pre-exist in the target server, a
 4. run the user manager
    
    ```
-   ./user-manager.sh
+   ./user-manager.sh [export | import | migrate]
    ```
+**NOTE: when you export, only export parameters needed, when import then only import parameters are needed, when igrate you need to specify both export and import related variables**

@@ -4,7 +4,7 @@ echo "starting exporter"
 
 ERROR_COUNT=0
 # Get users as single json
-./kcadm.sh get users -r $EXPORT_REALM -F id,username > $ALL_USERS_FILE
+kcadm.sh get users -r $EXPORT_REALM -F id,username > $ALL_USERS_FILE
 
 # For each user, get role mappings, group memberships and user attributes and append it to the respective user entry
 users=$(cat $ALL_USERS_FILE | jq -c '.[]')
@@ -22,10 +22,10 @@ do
   echo "Getting user groups for userID=$user_id username=$username"
 
   # Create a directory for each user 
-  mkdir -p $EXPORT_DIRECTORY/$username
+  mkdir -p $WORK_DIRECTORY/$username
 
   # Get full user json excluding the id and timestamp
-  ./kcadm.sh get users/$user_id --fields '*(*(*(*(*(*))))),-id,-createdTimestamp' > $EXPORT_DIRECTORY/$username/user.json
+  kcadm.sh get users/$user_id --fields '*(*(*(*(*(*))))),-id,-createdTimestamp' > $WORK_DIRECTORY/$username/user.json
 
   # If failed to get user, skip the current iteration
   if [ $? -ne 0 ]; then
@@ -35,7 +35,7 @@ do
   fi
 
   # Get the paths of all groups the current user is a member of and save into separate csv file (space separated)
-  ./kcadm.sh get users/$user_id/groups -F path --format CSV > $EXPORT_DIRECTORY/$username/group_paths.csv
+  kcadm.sh get users/$user_id/groups -F path --format CSV > $WORK_DIRECTORY/$username/group_paths.csv
 
   # If failed, skip the rest, (for now there is no rest)
   if [ $? -ne 0 ]; then

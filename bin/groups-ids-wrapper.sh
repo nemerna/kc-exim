@@ -21,7 +21,7 @@ get_group_id() {
 }
 
 # Iterate over each directory
-for user_dir in "$IMPORT_DIRECTORY"/*; do
+for user_dir in "$WORK_DIRECTORY"/*; do
     # Ensure it's a directory
     if [ -d "$user_dir" ]; then
         # Define the group_paths file for this directory
