@@ -8,20 +8,29 @@ build:
 export: ## run an export job, exports remote server users into local filesystem
 
 
-	CONTAINER_ID=$$(docker run -d \
+	docker run -it \
 	-e EXPORT_KEYCLOAK_SERVER=$(EXPORT_KEYCLOAK_SERVER) \
 	-e EXPORT_REALM=$(EXPORT_REALM) \
 	-e EXPORT_TOKEN=$(token) \
 	-v $(WORK_DIRECTORY):/home/default/EXPORT_DIR \
-	kc-exim:latest export); \
-	docker wait $${CONTAINER_ID}
+	kc-exim:latest export
+
+# export: ## run an export job, exports remote server users into local filesystem
+
+
+# 	CONTAINER_ID=$$(docker run -d \
+# 	-e EXPORT_KEYCLOAK_SERVER=$(EXPORT_KEYCLOAK_SERVER) \
+# 	-e EXPORT_REALM=$(EXPORT_REALM) \
+# 	-e EXPORT_TOKEN=$(token) \
+# 	-v $(WORK_DIRECTORY):/home/default/EXPORT_DIR \
+# 	kc-exim:latest export); \
+# 	docker wait $${CONTAINER_ID}
 
 import: ## run an import job, imports local users/groups into a remote server
 
-	CONTAINER_ID=$$(docker run -d \
+	docker run -it \
 	-e IMPORT_KEYCLOAK_SERVER=$(IMPORT_KEYCLOAK_SERVER) \
 	-e IMPORT_REALM=$(IMPORT_REALM) \
 	-e IMPORT_TOKEN=$(token) \
 	-v $(WORK_DIRECTORY):/home/default/IMPORT_DIR \
-	kc-exim:latest import); \
-	docker wait $${CONTAINER_ID}
+	kc-exim:latest import
