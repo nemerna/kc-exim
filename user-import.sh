@@ -1,5 +1,24 @@
 #!/bin/bash
 
+export ALL_GROUPS_FILE=${WORK_DIRECTORY}/IMPORT_SERVER_GROUPS.json
+
+# check for missing variables
+variables=("IMPORT_KEYCLOAK_SERVER" "IMPORT_TOKEN" "WORK_DIRECTORY" "ALL_GROUPS_FILE")
+
+for var in "${variables[@]}"; do
+    if [ -z "${!var}" ]; then
+        echo "Error: $var is not set"
+        exit 1
+    fi
+done
+
+
+# get all groups of the target import server
+kcadm.sh get groups  --realm $IMPORT_REALM --server $IMPORT_KEYCLOAK_SERVER --token $IMPORT_TOKEN --no-config  > ${ALL_GROUPS_FILE}
+
+# run the groups wrapper
+groups-ids-wrapper.sh
+
 for USER_DIR in $(find $WORK_DIRECTORY/* -type d)
 do
     USER_JSON_FILE="${USER_DIR}/USER.json"
@@ -8,7 +27,7 @@ do
     if [[ -f $USER_JSON_FILE ]]
     then
         # Create user from user.json file
-        USER_ID=$(kcadm.sh create users -r $IMPORT_REALM -f $USER_JSON_FILE -i)
+        USER_ID=$(kcadm.sh create users -r $IMPORT_REALM -f $USER_JSON_FILE  --realm $IMPORT_REALM --server $IMPORT_KEYCLOAK_SERVER --token $IMPORT_TOKEN --no-config  -i)
         if [ $? -ne 0 ]; then
             #TO-DO handle when user exists, only join him to groups?
             echo "skipping the currently user as it exists , we talk about the dir $USER_JSON_FILE"
@@ -21,7 +40,7 @@ do
             do
                 if [[ ! -z "$GROUP_ID" ]]
                 then
-                    kcadm.sh update users/$USER_ID/groups/$GROUP_ID -r kcm -s realm=$IMPORT_REALM -s userId=$USER_ID -s groupId=$GROUP_ID -n
+                    kcadm.sh update users/$USER_ID/groups/$GROUP_ID -r kcm -s realm=$IMPORT_REALM -s userId=$USER_ID -s groupId=$GROUP_ID  --realm $IMPORT_REALM --server $IMPORT_KEYCLOAK_SERVER --token $IMPORT_TOKEN --no-config -n
                 fi
             done < $GROUP_ID_FILE
         else
