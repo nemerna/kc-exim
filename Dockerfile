@@ -16,16 +16,14 @@ COPY --from=keycloak /opt/keycloak/bin/client/keycloak-admin-cli-${KEYCLOAK_VERS
 COPY --from=keycloak /opt/keycloak/bin/client/lib/ client/lib/
 COPY --from=keycloak /opt/keycloak/bin/kcadm.sh .
 
-COPY user-import.sh /opt/keycloak/bin/user-import.sh
-COPY user-export.sh /opt/keycloak/bin/user-export.sh
-COPY groups-ids-wrapper.sh /opt/keycloak/bin/groups-ids-wrapper.sh
-COPY Entrypoint.sh /opt/keycloak/bin/Entrypoint.sh
+COPY scripts/*.sh /opt/keycloak/bin/
 
-RUN chmod +x /opt/keycloak/bin/Entrypoint.sh
-RUN chmod +x /opt/keycloak/bin/kcadm.sh
-RUN chmod +x /opt/keycloak/bin/user-import.sh
-RUN chmod +x /opt/keycloak/bin/user-export.sh
-RUN chmod +x /opt/keycloak/bin/groups-ids-wrapper.sh
+
+RUN chmod +x /opt/keycloak/bin/Entrypoint.sh && \
+    chmod +x /opt/keycloak/bin/kcadm.sh && \
+    chmod +x /opt/keycloak/bin/user-import.sh && \
+    chmod +x /opt/keycloak/bin/user-export.sh && \
+    chmod +x /opt/keycloak/bin/groups-ids-wrapper.sh
 
 USER 185
 ENTRYPOINT ["/opt/keycloak/bin/Entrypoint.sh"]
