@@ -18,12 +18,10 @@ COPY --from=keycloak /opt/keycloak/bin/kcadm.sh .
 
 COPY scripts/*.sh /opt/keycloak/bin/
 
-
 RUN chmod +x /opt/keycloak/bin/Entrypoint.sh && \
     chmod +x /opt/keycloak/bin/kcadm.sh && \
     chmod +x /opt/keycloak/bin/user-import.sh && \
-    chmod +x /opt/keycloak/bin/user-export.sh && \
-    chmod +x /opt/keycloak/bin/groups-ids-wrapper.sh
+    chmod +x /opt/keycloak/bin/user-export.sh
 
 USER 185
 ENTRYPOINT ["/opt/keycloak/bin/Entrypoint.sh"]

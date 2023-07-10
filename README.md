@@ -16,7 +16,6 @@ make build
       EXPORT_KEYCLOAK_SERVER=http://localhost:2020
       EXPORT_REALM=kcm
       EXPORT_TOKEN=xxxxx
-      WORK_DIRECTORY=$(pwd)/some-dir
    ```
 2. start the EXPORT job
    ```
@@ -31,9 +30,7 @@ make build
       # export the following env variables
       IMPORT_KEYCLOAK_SERVER=http://localhost:1010
       IMPORT_REALM=kcm
-      IMPORT_TOKEN=xxxxx
-      WORK_DIRECTORY=$(pwd)/some-dir-that-contain-previous-export
-      
+      IMPORT_TOKEN=xxxxx      
    ```
 
 2. start the IMPORT job
@@ -46,5 +43,5 @@ make build
 ### obtaining a token
 
 ```
-   export token=$(curl -X POST --location "https://your-keyclaok-server/realms/kcm/protocol/openid-connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=password&username=your-user-name&password=no-one-knows&client_id=your-client-id"  | jq -r .access_token)
+   export EXPORT_TOKEN=$(curl -X POST --location "https://your-keyclaok-server/realms/kcm/protocol/openid-connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=password&username=your-user-name&password=no-one-knows&client_id=your-client-id"  | jq -r .access_token)
 ```
