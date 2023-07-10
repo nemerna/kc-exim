@@ -3,9 +3,14 @@ KeyCloak user Export/Import tool
 
 ## how to run **docker-needed**
 
-### build
+### build-docker
 ```
-make build
+make build-docker
+```
+
+### build-podman
+```
+make build-podman
 ```
 
 ### EXPORT
