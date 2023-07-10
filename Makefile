@@ -15,7 +15,7 @@ export: ## run an export job, exports remote server users into local filesystem
 	-e EXPORT_REALM=$(EXPORT_REALM) \
 	-e EXPORT_TOKEN=$(EXPORT_TOKEN) \
 	-v $(WORK_DIRECTORY):/home/default/kc-exim \
-	quay.io/nnaamneh/kc-exim export
+	quay.io/ecosystem-appeng/kc-exim export
 
 import: ## run an import job, imports local users/groups into a remote server
 	docker run -it \
@@ -23,6 +23,6 @@ import: ## run an import job, imports local users/groups into a remote server
 	-e IMPORT_REALM=$(IMPORT_REALM) \
 	-e IMPORT_TOKEN=$(IMPORT_TOKEN) \
 	-v $(WORK_DIRECTORY):/home/default/kc-exim/ \
-	quay.io/nnaamneh/kc-exim import
+	quay.io/ecosystem-appeng/kc-exim import
 
 generate-token: 	## TO-DO maybe support generating token based on username/password

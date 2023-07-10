@@ -12,7 +12,7 @@ if [ -z "$WORK_DIRECTORY" ]; then
 fi
 
 if [ "$1" = "import" ]; then
-    user-import.sh> $WORK_DIRECTORY/Logs
+    user-import.sh > $WORK_DIRECTORY/Logs
 elif [ "$1" = "export" ]; then
     mkdir -p $WORK_DIRECTORY
     user-export.sh > $WORK_DIRECTORY/Logs

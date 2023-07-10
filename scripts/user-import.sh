@@ -15,8 +15,7 @@ users=$(cat $USERS_FILE | jq -c '.[]')
 ERROR_COUNT=0
 IMPORTED_USERS_COUNT=0
 # For each user id&name get groups paths and full user definition relevant attributes
-for user in $users
-do
+while IFS= read -r user; do
     echo
     echo "---------------importing user----------------"
     echo "${user}" | jq . 
@@ -30,5 +29,6 @@ do
     echo "------------successfully imported------------"
     echo
     echo
-done
+done < <(jq -c '.[]' "$USERS_FILE")
+
 echo -e "\n\nFinished the Import Proccess, Imported:$IMPORTED_USERS_COUNT Users, with $ERROR_COUNT Failed Imports"
