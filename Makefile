@@ -1,16 +1,21 @@
 WORK_DIRECTORY := $(shell pwd)/data
+CONTAINER_ENGINE ?= $(shell which podman >/dev/null 2>&1 && echo podman || echo docker)
 
 help: ## Prints help for targets with comments
 	@grep -E '^[a-zA-Z0-9.\ _-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-build-docker:
+build-docker: ## Build the application image using Docker
 	docker build -t quay.io/ecosystem-appeng/kc-exim .
 
-build-podman:
+build-podman: ## Build the application image using Podman
 	podman build -t quay.io/ecosystem-appeng/kc-exim .
 
+build: ## build with available Container Enging
+	@$(CONTAINER_ENGINE) build -t quay.io/ecosystem-appeng/kc-exim .
+
 export: ## run an export job, exports remote server users into local filesystem
-	docker run -it \
+
+	@$(CONTAINER_ENGINE) run -it \
 	-e EXPORT_KEYCLOAK_SERVER=$(EXPORT_KEYCLOAK_SERVER) \
 	-e EXPORT_REALM=$(EXPORT_REALM) \
 	-e EXPORT_TOKEN=$(EXPORT_TOKEN) \
@@ -18,7 +23,7 @@ export: ## run an export job, exports remote server users into local filesystem
 	quay.io/ecosystem-appeng/kc-exim export
 
 import: ## run an import job, imports local users/groups into a remote server
-	docker run -it \
+	@$(CONTAINER_ENGINE) run -it \
 	-e IMPORT_KEYCLOAK_SERVER=$(IMPORT_KEYCLOAK_SERVER) \
 	-e IMPORT_REALM=$(IMPORT_REALM) \
 	-e IMPORT_TOKEN=$(IMPORT_TOKEN) \

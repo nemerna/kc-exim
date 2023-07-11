@@ -18,9 +18,9 @@ make build-podman
 1. prepare variables
    ```
       # export the following env variables
-      EXPORT_KEYCLOAK_SERVER=http://localhost:2020
-      EXPORT_REALM=kcm
-      EXPORT_TOKEN=xxxxx
+      export EXPORT_KEYCLOAK_SERVER=http://localhost:2020
+      export EXPORT_REALM=kcm
+      export EXPORT_TOKEN=xxxxx
    ```
 2. start the EXPORT job
    ```
