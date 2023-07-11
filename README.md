@@ -1,69 +1,89 @@
-# kcum
-key cloak user migrationr shell scripts
+# kc-exim
+KeyCloak user Export/Import tool
 
-## about
-this app contains the kcadm.sh and its dependincies script provided with the latest Keycloak distibution.
-in addition a customized scripts that uses the kcadm.sh to export/import keycloak users from a server/realm into a target server/realm
-it does export relevant user infor including attributes
-it does export group paths
-during the import, the same groups expected to pre-exist in the target server, and the newly migrated users will join the target groups according to the target server group ids, (automatically)
+## Building the Image
 
-## how to run
+### Build
+```
+make build
+```
 
-1. clone
+
+### build with Docker
+```
+make build-docker
+```
+
+
+### build with Podman
+```
+make build-podman
+```
+
+---
+---
+## Variables Used By the Application
+
+| Environment Variables    	|                                                      Description                                                      	|
+|--------------------------	|:---------------------------------------------------------------------------------------------------------------------:	|
+| `EXPORT_KEYCLOAK_SERVER` 	|                              The Keycloak Server that you would like to export Users from                             	|
+| `EXPORT_REALM`           	|                       The Realm Name under the EXPORT Server you would like to export users from                      	|
+| `EXPORT_TOKEN`           	| A Temporary Token you need to obtain (using curl or any other method)<br>used for authenticating to the EXPORT server 	|
+| `IMPORT_KEYCLOAK_SERVER` 	|                              The Keycloak Server that you would like to Import Users into                             	|
+| `IMPORT_REALM`           	|                       The Realm Name under the IMPORT Server you would like to IMPORT users into                      	|
+| `IMPORT_TOKEN`           	| A Temporary Token you need to obtain (using curl or any other method)<br>used for authenticating to the IMPORT server 	|
+
+---
+---
+
+## Running The Application
+
+
+### EXPORT
+
+1. prepare variables
+   ```
+      export EXPORT_KEYCLOAK_SERVER=http://localhost:2020
+      export EXPORT_REALM=kcm
+      export EXPORT_TOKEN=xxxxx
+   ```
    
+2. start the EXPORT job
+   ```
+      make export
    ```
 
-   git clone git@github.com:nemerna/kcum.git
-   ```
-2. move to the project dir directory
-   
-   ```
-    cd kcum
-   ```
 
-3. add the bin to your PATH
+### IMPORT
 
+1. prepare variables
    ```
-    export PATH=$PATH:$(pwd)/bin
+      # export the following env variables
+      IMPORT_KEYCLOAK_SERVER=http://localhost:1010
+      IMPORT_REALM=kcm
+      IMPORT_TOKEN=xxxxx      
    ```
 
-4. export relevant env vars
-   
+2. start the IMPORT job
+   ```
+   make import
    ```
 
-    #the work directory to proccess directory (always should be set)
-    export WORK_DIRECTORY=./USERMANAGER_EXPORT
+---
+---
 
-    # the source server url (copy from)
-    export IMPORT_KEYCLOAK_SERVER=https://src-server.com
+## Help Commands
 
-    # the realm of the source server (copy from)
-    export IMPORT_REALM=src-realm
+### obtaining an EXPORT_TOKEN token example
 
-    # the client-id of the source server (copy from)
-    export IMPORT_CLIENT=src-client
+```
+   export EXPORT_TOKEN=$(curl -X POST --location "https://$EXPORT_KEYCLOAK_SERVER/realms/$EXPORT_REALM/protocol/openid-connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=password&username=$USER_NAME_PLACE_HOLDER&password=$PASSWORD_PLACE_HOLDER&client_id=$CLIENT_ID_PLACE_HOLDER"  | jq -r .access_token)
+```
 
-    # the client secret of the source server (copy from)
-    export IMPORT_SECRET=src-secret
+### obtaining an IMPORT_TOKEN token example
+
+```
+   export IMPORT_TOKEN=$(curl -X POST --location "https://$IMPORT_KEYCLOAK_SERVER/realms/$IMPORT_REALM/protocol/openid-connect/token" -H "Content-Type: application/x-www-form-urlencoded" -d "grant_type=password&username=$USER_NAME_PLACE_HOLDER&password=$PASSWORD_PLACE_HOLDER&client_id=$CLIENT_ID_PLACE_HOLDER"  | jq -r .access_token)
+```
 
 
-    # the target server url (create in)
-    export EXPORT_KEYCLOAK_SERVER=https://target-server.com
-
-    # the realm of the target server (create in)
-    export EXPORT_REALM=target-realm
-
-    # the client-id of the target server (create in)
-    export EXPORT_CLIENT=target-client
-
-    # the client secret of the target server (create in)
-    export EXPORT_SECRET=target-secret
-
-   ```
-4. run the user manager
-   
-   ```
-    user-manager.sh [export | import | migrate]
-   ```
-**NOTE: when you export, only export parameters needed, when import then only import parameters are needed, when igrate you need to specify both export and import related variables**
