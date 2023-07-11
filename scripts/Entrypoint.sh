@@ -36,8 +36,8 @@ if [ "$1" = "import" ]; then
     log_finish_date | tee -a "$WORK_DIRECTORY/Logs-import-$IMPORT_REALM-$timestamp"
 elif [ "$1" = "export" ]; then
     mkdir -p $WORK_DIRECTORY
-    user-export.sh 2>&1 | tee "$WORK_DIRECTORY/Logs-import-$EXPORT_REALM-$timestamp"
-    log_finish_date | tee -a "$WORK_DIRECTORY/Logs-import-$EXPORT_REALM-$timestamp"
+    user-export.sh 2>&1 | tee "$WORK_DIRECTORY/Logs-export-$EXPORT_REALM-$timestamp"
+    log_finish_date | tee -a "$WORK_DIRECTORY/Logs-export-$EXPORT_REALM-$timestamp"
 else
     echo "Invalid argument provided."
 fi
